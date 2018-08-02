@@ -5,10 +5,10 @@ public class Deck {
 
     // methods
     public Deck() {
-        cards = new ArrayList<>();
+        cards = new ArrayList<>(); // init cards holder
         for (Suit suit : Suit.values()) {
             for (int i = 1; i < 14; ++i) {
-                cards.add(new Card(i, suit));
+                cards.add(new Card(i, suit)); // add cards
             }
         }
     }
@@ -16,7 +16,7 @@ public class Deck {
     public void shuffle() {
         Random random = new Random();
         for (int j = cards.size() - 1; j >= 0; --j) {
-            int i = random.nextInt(j);
+            int i = random.nextInt(j); // backward swap
             swap(i, j);
         }
     }
@@ -27,7 +27,7 @@ public class Deck {
         cards.set(j, tmp);
     }
 
-    public Card deal() {
+    public Card deal() { // deal one
         if (cards.isEmpty())
             throw new NoSuchElementException("deck is empty");
         int lastIndex = cards.size() - 1;
@@ -36,10 +36,10 @@ public class Deck {
         return popCard;
     }
 
-    public List<Card> deal(int n) {
+    public List<Card> deal(int n) { // deal n
         if (n <= 0 || n > cards.size())
             throw new IndexOutOfBoundsException("can't not deal this many cards: " + n);
-        List<Card> popCards = new LinkedList<>();
+        List<Card> popCards = new LinkedList<>(); // list of cards
         int lastIndex = cards.size() - 1;
         while (n-- > 0) {
             popCards.add(cards.get(lastIndex));
@@ -52,7 +52,7 @@ public class Deck {
 
 class Card {
     // fields
-    private final int val;
+    private final int val; // all fields final
     private final Suit suit;
 
     // methods
