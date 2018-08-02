@@ -48,6 +48,15 @@ public class Deck {
         }
         return popCards;
     }
+    
+    public void print() {
+        System.out.println("Printing deck: ");
+        for (Card card : cards) {
+            card.print();
+            System.out.print(", ");
+        }
+        System.out.println();
+    }
 }
 
 class Card {
@@ -65,6 +74,18 @@ class Card {
         String show = String.valueOf(suit) + String.valueOf(val);
         System.out.print(show);
         return show;
+    }
+    
+    public void print() {
+        System.out.print(this.toString());
+    }
+    
+    public String toString() {
+        return String.valueOf(suit) + String.valueOf(val);
+    }
+    
+    public boolean equals(Card other) {
+        return this.val == other.val && this.suit == other.suit;
     }
 }
 
