@@ -70,6 +70,14 @@ class Card {
         this.suit = suit;
     }
 
+    public int getVal() {
+        return val;
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
     public String show() {
         String show = String.valueOf(suit) + String.valueOf(val);
         System.out.print(show);
