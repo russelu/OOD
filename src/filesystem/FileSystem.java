@@ -14,7 +14,8 @@ public class FileSystem {
     public List<String> findPath(String name) {
         StringBuilder sb = new StringBuilder();
         List<String> res = new ArrayList<>();
-        findPath(root, sb, res, name);
+        for (Node child : root.getContent())
+            findPath(child, sb, res, name);
         return res;
     }
 
@@ -58,18 +59,55 @@ public class FileSystem {
         return null;
     }
 
+    public Directory mkdir(String path) {
+        if (path == null) throw new IllegalArgumentException("Invalid path!");
+        if (path.length() == 0) return root;
+        String[] folders;
+        Directory cur = root, prev = root;
+        if (path.charAt(0) == '/') {
+            path = path.substring(1);
+        }
+        folders = path.split("/");
+        for (String folder : folders) {
+            cur = cur.getChildFolder(folder);
+            if (cur == null)
+                cur = prev.createNewFolder(folder);
+            prev = cur;
+        }
+        return cur;
+    }
+
     public Directory createDirectory(String name) {
         return root.createNewFolder(name);
+    }
+
+    public Directory getRoot() {
+        return root;
     }
 
     public static void main(String[] args) {
         FileSystem fs = new FileSystem();
         Directory cur = fs.createDirectory("Documents").createNewFolder("apps");
-        cur.createNewFile("java");
+        cur.createNewFile("java1");
+        cur.createNewFile("java2");
+        cur.createNewFile("java3");
+        cur.createNewFile("java4");
+        cur.createNewFile("java5");
+        cur.createNewFile("java6");
         cur = cur.createNewFolder("apps").createNewFolder("apps").createNewFolder("apps");
+        cur.createNewFile("java1");
+        cur.createNewFile("java2");
+        cur.createNewFile("java3");
+        cur.createNewFile("java4");
+        cur.createNewFile("java5");
+        cur.createNewFile("java6");
         // cur = cur.createNewFolder("java");
         for (String path : fs.findPath("apps"))
             System.out.println(path);
         System.out.println(cur.curPath());
+        System.out.println(fs.getRoot().getFileCount());
+        Directory newFolder = fs.mkdir("/User/users/iii/new");
+        System.out.println(newFolder.getName());
+        System.out.println(newFolder.curPath());
     }
 }
