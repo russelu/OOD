@@ -55,6 +55,30 @@ public class Directory extends Node {
         return file;
     }
 
+    protected boolean contains(String name) {
+        for (Node child : content) {
+            if (child.getName().equals(name))
+                return true;
+        }
+        return false;
+    }
+
+    protected Node getChild(String name) {
+        for (Node child : content) {
+            if (child.getName().equals(name))
+                return child;
+        }
+        return null;
+    }
+
+    protected Directory getChildFolder(String name) {
+        for (Node child : content) {
+            if (child.isFile() && child.getName().equals(name))
+                return (Directory) child;
+        }
+        return null;
+    }
+
     protected int getFileCount() {
         int cnt = 0;
         for (Node n : content) {
