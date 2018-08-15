@@ -48,7 +48,7 @@ public abstract class Node {
         return name;
     }
 
-    public void setName(String name) {
+    public void reName(String name) {
         setModifiedTime();
         this.name = name;
     }
