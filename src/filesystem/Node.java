@@ -10,6 +10,7 @@ public abstract class Node {
     protected String name;
     protected final Date createTime;
     protected Date modifiedTime;
+    protected static final int[] DEFAULT_PERMISSION = new int[]{7, 5, 4};
 
     // unused
     protected Node(String name, Node parent, int[] permissions, boolean file) {
@@ -23,6 +24,7 @@ public abstract class Node {
 
     public abstract long getSize();
     public abstract boolean isFile();
+    protected abstract int getFileCount();
 
     public Node getParent() {
         return parent;
