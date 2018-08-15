@@ -69,7 +69,6 @@ public abstract class Node {
 
     public String curPath() {
         StringBuilder path = new StringBuilder();
-        path.append("/");
         curPath(this, path);
         return path.toString();
     }
@@ -78,8 +77,8 @@ public abstract class Node {
         if (cur == null || cur.getParent() == null) throw new IllegalArgumentException("Invalid folder");
         if (cur.getParent() != cur) {
             curPath(cur.getParent(), path);
+            path.append(cur.getName());
         }
-        path.append(cur.getName());
-        if (!cur.isFile()) path.append("/");
+        path.append("/");
     }
 }
