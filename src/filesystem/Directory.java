@@ -55,10 +55,10 @@ public class Directory extends Node {
         return file;
     }
 
-    public int getFileCount() {
+    protected int getFileCount() {
         int cnt = 0;
         for (Node n : content) {
-            cnt += n.isFile() ? 1: ((Directory) n).getFileCount();
+            cnt += n.getFileCount();
         }
         return cnt;
     }
