@@ -12,31 +12,55 @@ public class Directory extends Node {
     }
 
     public Directory(String name, Node parent) {
-        this(name, parent, new int[]{7, 5, 4});
+        this(name, parent, DEFAULT_PERMISSION);
     }
 
     public List<Node> getContent() {
         return new ArrayList<>(content);
     }
 
-    public Node createNewNode(Node child) {
-        super.setModifiedTime();
+    public Node addNode(Node child) {
+        setModifiedTime();
         content.add(child);
         return child;
     }
 
+    public boolean deleteNode(Node node) {
+        for (Node next : content) {
+            if (next == node) {
+                return content.remove(node);
+            }
+            if (!next.isFile() && ((Directory) next).deleteNode(node))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean deleteCurNode() {
+        if (parent == this) throw new IllegalArgumentException("Not able to delete root");
+        return ((Directory) parent).getContent().remove(this);
+    }
+
     public Directory createNewFolder(String name) {
-        super.setModifiedTime();
+        setModifiedTime();
         Directory folder = new Directory(name, this);
         content.add(folder);
         return folder;
     }
 
     public File createNewFile(String name) {
-        super.setModifiedTime();
+        setModifiedTime();
         File file = new File(name, this);
         content.add(file);
         return file;
+    }
+
+    public int getFileCount() {
+        int cnt = 0;
+        for (Node n : content) {
+            cnt += n.isFile() ? 1: ((Directory) n).getFileCount();
+        }
+        return cnt;
     }
 
     public long getSize() {
