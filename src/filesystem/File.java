@@ -1,113 +1,27 @@
 package filesystem;
 
-import java.util.ArrayList;
-import java.util.List;
+public class File extends Node {
+    private byte[] content;
+    private static final int BYTE_SIZE = 8;
 
-public class FileSystem {
-    private final Directory root;
-
-    public FileSystem() {
-        root = new Directory("", null);
-        root.setParent(root);
+    public File(String name, Node parent, int[] permissions, byte[] content) {
+        super(name, parent, permissions, true);
+        this.content = content;
     }
 
-    public List<String> findPath(String name) {
-        StringBuilder sb = new StringBuilder();
-        List<String> res = new ArrayList<>();
-        for (Node child : root.getContent())
-            findPath(child, sb, res, name);
-        return res;
+    public File(String name, Node parent, byte[] content) {
+        this(name, parent, DEFAULT_PERMISSION, content);
     }
 
-    private void findPath(Node cur, StringBuilder sb, List<String> res, String name) {
-        int len = sb.length();
-        if (cur.getName().equals(name)) {
-            sb.append("/" + cur.getName());
-            if (!cur.isFile()) sb.append("/");
-            res.add(sb.toString());
-            sb.setLength(len);
-        }
-        if (cur.isFile()) return;
-
-        sb.append("/" + cur.getName());
-        for (Node next : ((Directory) cur).getContent()) {
-            findPath(next, sb, res, name);
-        }
-        sb.setLength(len);
+    public File(String name, Node parent) {
+        this(name, parent, new int[]{7, 5, 4}, new byte[]{});
     }
 
-    public Directory cd(String path, Directory cur) {
-        if (path == null) throw new IllegalArgumentException("Invalid path!");
-        if (path.length() == 0) return root;
-        String[] folders;
-        if (path.charAt(0) == '/') {
-            cur = root;
-            path = path.substring(1);
-        }
-        folders = path.split("/");
-        Directory res = cd(folders, cur, 0);
-        return res == null ? cur: res;
+    public long getSize() {
+        return BYTE_SIZE * content.length;
     }
 
-    private Directory cd(String[] path, Directory cur, int idx) {
-        if (idx == path.length) return cur;
-        for (Node next : cur.getContent()) {
-            if (!next.isFile() && next.getName().equals(path[idx])) {
-                return cd(path, cur, idx + 1);
-            }
-        }
-        return null;
-    }
+    public boolean isFile() {return true;}
 
-    public Directory mkdir(String path) {
-        if (path == null) throw new IllegalArgumentException("Invalid path!");
-        if (path.length() == 0) return root;
-        String[] folders;
-        Directory cur = root, prev = root;
-        if (path.charAt(0) == '/') {
-            path = path.substring(1);
-        }
-        folders = path.split("/");
-        for (String folder : folders) {
-            cur = cur.getChildFolder(folder);
-            if (cur == null)
-                cur = prev.createNewFolder(folder);
-            prev = cur;
-        }
-        return cur;
-    }
-
-    public Directory createDirectory(String name) {
-        return root.createNewFolder(name);
-    }
-
-    public Directory getRoot() {
-        return root;
-    }
-
-    public static void main(String[] args) {
-        FileSystem fs = new FileSystem();
-        Directory cur = fs.createDirectory("Documents").createNewFolder("apps");
-        cur.createNewFile("java1");
-        cur.createNewFile("java2");
-        cur.createNewFile("java3");
-        cur.createNewFile("java4");
-        cur.createNewFile("java5");
-        cur.createNewFile("java6");
-        cur = cur.createNewFolder("apps").createNewFolder("apps").createNewFolder("apps");
-        cur.createNewFile("java1");
-        cur.createNewFile("java2");
-        cur.createNewFile("java3");
-        cur.createNewFile("java4");
-        cur.createNewFile("java5");
-        cur.createNewFile("java6");
-        // cur = cur.createNewFolder("java");
-        for (String path : fs.findPath("apps"))
-            System.out.println(path);
-        System.out.println(cur.curPath());
-        System.out.println(fs.getRoot().getFileCount());
-        Directory newFolder = fs.mkdir("/User/users/iii/new");
-        System.out.println(newFolder.getName());
-        System.out.println(newFolder.curPath());
-    }
+    protected int getFileCount() {return 1;}
 }
