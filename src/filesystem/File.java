@@ -10,7 +10,7 @@ public class File extends Node {
     }
 
     public File(String name, Node parent, byte[] content) {
-        this(name, parent, new int[]{7, 5, 4}, content);
+        this(name, parent, DEFAULT_PERMISSION, content);
     }
 
     public File(String name, Node parent) {
